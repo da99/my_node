@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}
+#
+set -u -e -o pipefail
+
+local +x ORIGINAL_ARGS="$@"
+if [[ -z "$@" ]]; then
+  local +x ACTION=watch
+else
+  local +x ACTION=$1; shift
+fi
+
+mkdir -p tmp/in
+case "$ACTION" in
+
+  edit)
+    $EDITOR tmp/in/scratch.js
+    ;;
+
+  watch)
+    local +x CMD="my_node scratch run"
+    ${=CMD} || :
+    process watch "-r sh -r bin -r tmp/in" "$CMD"
+    ;;
+
+  run)
+    node tmp/in/scratch.js
+    ;;
+
+  *)
+    echo "!!! Unknown arguments: $ORIGINAL_ARGS" >&2
+    exit 1
+    ;;
+
+esac
+
