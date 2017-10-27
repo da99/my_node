@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}
+#
+set -u -e -o pipefail
+
+local +x ORIGINAL_ARGS="$@"
+local +x ACTION=$1; shift
+
+case "$ACTION" in
+
+  build)
+    cd "$THIS_DIR"
+    sh_color ORANGE "=== {{Compiling}} for dev build..."
+    my_crystal __ build src/my_node.cr -o bin/my_node.exe
+    ;;
+
+
+  release)
+    cd "$THIS_DIR"
+    sh_color ORANGE "=== {{Compiling}} for BOLD{{release}}..."
+    my_crystal __ build --release --no-debug src/my_node.cr -o bin/my_node.exe
+    ;;
+
+
+  *)
+    echo "!!! Unknown arguments: $ORIGINAL_ARGS" >&2
+    exit 1
+    ;;
+
+esac
+

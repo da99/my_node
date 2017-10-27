@@ -12,6 +12,7 @@ fi
 local +x THE_ARGS="$@"
 local +x THIS_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
 PATH="$PATH:$THIS_DIR/bin"
+PATH="$PATH:$THIS_DIR/../my_crystal/bin"
 PATH="$PATH:$THIS_DIR/../process/bin"
 PATH="$PATH:$THIS_DIR/../sh_color/bin"
 
@@ -35,9 +36,12 @@ case $ACTION in
       exit 0
     fi
 
-    # === It's an error:
-    echo "!!! Unknown action: $ACTION" 1>&2
-    exit 1
+    if [[ ! -x "$THIS_DIR/bin/my_node.exe" ]]; then
+      sh_color RED "{{my_node.exe}} has not been compiled."
+      exit 2
+    fi
+
+    "$THIS_DIR"/bin/my_node.exe $ACTION $@
     ;;
 
 esac
