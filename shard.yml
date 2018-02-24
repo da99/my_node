@@ -3,6 +3,6 @@ name: my_node
 version: 0.1.0
 development_dependencies:
   shell_out:
-    github: da99/shell_out
+    github: da99/shell_out.cr
   exit_on_error:
     github: da99/exit_on_error
